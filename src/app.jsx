@@ -4,14 +4,21 @@ import Tarea from "./componentes/tarea";
 import './app.css';
 
 const App = () => {
-    const [tareas, setTareas] = useState([
-        { id: 1, texto: 'APRENDER REACT', completado: false },
-        { id: 2, texto: 'HACER LA COMPRA PENDIENTE', completado: true },
-        { id: 3, texto: 'LLAMAR A MAMÁ', completado: false }
-    ]);
+    const [tareas, setTareas] = useState(() => {
+        const savedTareas = localStorage.getItem('tareas');
+        return savedTareas ? JSON.parse(savedTareas) : [
+            { id: 1, texto: 'APRENDER REACT', completado: false },
+            { id: 2, texto: 'HACER LA COMPRA PENDIENTE', completado: true },
+            { id: 3, texto: 'LLAMAR A MAMÁ', completado: false }
+        ];
+    });
 
     const [modalVisible, setModalVisible] = useState(false);
     const [nuevaTareaTexto, setNuevaTareaTexto] = useState('');
+
+    useEffect(() => {
+        localStorage.setItem('tareas', JSON.stringify(tareas));
+    }, [tareas]);
 
     const toggleCompletado = (id) => {
         const nuevasTareas = tareas.map(tarea => {
