@@ -59,6 +59,6 @@ footer h3 {
 }
 
 .copyright:hover {
-  transform: scale(1.2);
+  transform: scale(1.01);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
