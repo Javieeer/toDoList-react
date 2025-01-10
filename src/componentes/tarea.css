@@ -26,6 +26,7 @@ li {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: black;
 }
 
 li:nth-child(odd) {
@@ -34,6 +35,6 @@ li:nth-child(odd) {
 
 /* Efecto de hover */
 li:hover {
-    transform: scale(1.1);
+    transform: scale(1.01);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }

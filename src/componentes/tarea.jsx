@@ -1,9 +1,16 @@
 import './tarea.css'
 
-const Tarea = ({ tarea }) => {
+const Tarea = ({ tarea, toggleCompletado }) => {
     return (
-        <li className='listaTareas' >{tarea.texto}</li>
+        <li className={tarea.completado ? 'completado' : ''}>
+            <input 
+                type="checkbox" 
+                checked={tarea.completado} 
+                onChange={() => toggleCompletado(tarea.id)} 
+            />
+            {tarea.texto}
+        </li>
     );
-}
+};
 
 export default Tarea
