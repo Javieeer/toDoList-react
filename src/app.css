@@ -1,12 +1,12 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+html, body, #app {
+    height: 100%;
     margin: 0;
     padding: 0;
 }
 
-#app {
-    height: 100vh;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
 }
 
 h1, h2 {
@@ -24,6 +24,7 @@ ul {
 }
 
 li {
+    width: 100%;
     background: #fff;
     margin: 10px 0;
     padding: 15px;
@@ -44,12 +45,15 @@ li:nth-child(odd) {
 }
 
 .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
     text-align: center;
     margin: 20px;
 }
 
 button {
-    margin: 5px;
+    width: 150px;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -99,6 +103,30 @@ button:hover {
     background-color: #000000;
     color: white;
     cursor: pointer;
+}
+
+.todolist {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.listaDone {
+    width: 50%;
+    padding: 20px;
+}
+
+.listaNoDone {
+    width: 50%;
+    padding: 20px;
+}
+
+footer {
+    margin-top: auto;
 }
 
 .modal-content button:hover {

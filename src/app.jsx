@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import FooterJavi from "./componentes/footer";
 import Tarea from "./componentes/tarea";
 import './app.css';
 
-const App = () => {
+const App = () => {  
     const [tareas, setTareas] = useState(() => {
         const savedTareas = localStorage.getItem('tareas');
         return savedTareas ? JSON.parse(savedTareas) : [
@@ -12,13 +12,28 @@ const App = () => {
             { id: 3, texto: 'LLAMAR A MAMÁ', completado: false }
         ];
     });
-
     const [modalVisible, setModalVisible] = useState(false);
     const [nuevaTareaTexto, setNuevaTareaTexto] = useState('');
+    const inputRef = useRef(null);
 
     useEffect(() => {
         localStorage.setItem('tareas', JSON.stringify(tareas));
     }, [tareas]);
+
+    useEffect(() => {
+        if (modalVisible) {
+            window.addEventListener('keydown', handleKeyDown);
+            if (inputRef.current) {
+                inputRef.current.focus();
+            }
+        } else {
+            window.removeEventListener('keydown', handleKeyDown);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [modalVisible]);
 
     const toggleCompletado = (id) => {
         const nuevasTareas = tareas.map(tarea => {
@@ -50,48 +65,42 @@ const App = () => {
         }
     };
 
-    useEffect(() => {
-        if (modalVisible) {
-            window.addEventListener('keydown', handleKeyDown);
-        } else {
-            window.removeEventListener('keydown', handleKeyDown);
-        }
-
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [modalVisible]);
-
     const tareasCompletadas = tareas.filter(tarea => tarea.completado);
 
     return (
         <>
-            <h2>Lista de Tareas</h2>
-            <ul>
-                {tareas
-                    .filter(tarea => !tarea.completado)
-                    .map(tarea => (
-                        <Tarea 
-                            key={tarea.id} 
-                            tarea={tarea} 
-                            toggleCompletado={toggleCompletado}
-                        />
-                    ))}
-            </ul>
-            {tareasCompletadas.length > 0 && (
-                <>
-                    <h2>Tareas Completadas</h2>
+            <div className="todolist">
+                <div className="listaNoDone">
+                    <h2>Lista de Tareas</h2>
                     <ul>
-                        {tareasCompletadas.map(tarea => (
-                            <Tarea 
-                                key={tarea.id} 
-                                tarea={tarea} 
-                                toggleCompletado={toggleCompletado}
-                            />
-                        ))}
+                        {tareas
+                            .filter(tarea => !tarea.completado)
+                            .map(tarea => (
+                                <Tarea 
+                                    key={tarea.id} 
+                                    tarea={tarea} 
+                                    toggleCompletado={toggleCompletado}
+                                />
+                            ))}
                     </ul>
-                </>
-            )}
+                </div>
+                <div className="listaDone">
+                    {tareasCompletadas.length > 0 && (
+                        <>
+                            <h2>Tareas Completadas</h2>
+                            <ul>
+                                {tareasCompletadas.map(tarea => (
+                                    <Tarea 
+                                        key={tarea.id} 
+                                        tarea={tarea} 
+                                        toggleCompletado={toggleCompletado}
+                                    />
+                                ))}
+                            </ul>
+                        </>
+                    )}
+                </div>
+            </div>
             <div className="buttons">
                 <button className="añadirTarea" onClick={() => setModalVisible(true)}>Añadir Tarea</button>
                 <button className="borrarTarea" onClick={() => setTareas([])}>Borrar todas las tareas</button>
@@ -106,6 +115,7 @@ const App = () => {
                             onChange={(e) => setNuevaTareaTexto(e.target.value)} 
                             onKeyPress={handleKeyPress}
                             placeholder="Descripción de la tarea" 
+                            ref={inputRef}
                         />
                         <button onClick={agregarTarea}>Agregar</button>
                         <button onClick={() => setModalVisible(false)}>Cancelar</button>
