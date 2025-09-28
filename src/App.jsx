@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'firebase/auth'
 import db from './firebase.js';
 import './styles/app.css';
 import FooterJavi from "./components/footer.jsx";
 import Tarea from "./components/tarea.jsx";
 import tareasIniciales from "./data/tasks.json";
+
+const auth = getAuth();
 
 function App() {
     /* Definimos la estructura de las tareas y creamos algunas de Ejemplo */
@@ -24,10 +27,16 @@ function App() {
         const checkMobile = () => {
             setIsMobile(window.matchMedia("(max-width: 655px)").matches);
         };
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
         fetchTareas();
         checkMobile();
         window.addEventListener("resize", checkMobile);
-        return () => window.removeEventListener("resize", checkMobile);
+        return () => {
+            window.removeEventListener("resize", checkMobile);
+            unsubscribe();
+        };
     }, []);
 
     /* Definimos los estados para el modal y la nueva tarea */
@@ -37,6 +46,7 @@ function App() {
     const [nuevoLink, setNuevoLink] = useState('');
     const [nuevaFechaEntrega, setNuevaFechaEntrega] = useState('');
     const [isMobile, setIsMobile] = useState(false);
+    const [user, setUser] = useState(null);
     const inputRef = useRef(null);
 
     /* Guardamos las tareas en el localStorage cada vez que cambian */
@@ -128,10 +138,47 @@ function App() {
         setTareas(tareas.filter(tarea => tarea.id !== id));
     };
 
+    const borrarTodasLasTareas = async () => {
+        // Elimina todas las tareas en Firestore
+        const tareasCollection = collection(db, "tareas");
+        const tareasSnapshot = await getDocs(tareasCollection);
+        const deletePromises = tareasSnapshot.docs.map((tareaDoc) =>
+            deleteDoc(doc(db, "tareas", tareaDoc.id))
+        );
+        await Promise.all(deletePromises);
+
+        // Limpia el estado local
+        setTareas([]);
+    };
+
+    const login = () => {
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then(result => setUser(result.user))
+            .catch(error => alert(error.message));
+    };
+
+    const logout = () => {
+        signOut(auth);
+    };
+
+    if (!user) {
+        return (
+            <div style={{ textAlign: "center", marginTop: "60px" }}>
+                <h2>Inicia sesión para ver tus tareas</h2>
+                <button onClick={login}>Iniciar sesión con Google</button>
+            </div>
+        );
+    }
+    
     const tareasCompletadas = tareas.filter(tarea => tarea.completado);
 
     return (
         <>
+            <div className={isMobile ? 'logout-container responsive' : 'logout-container normal'}>
+                <span>{user.displayName}</span>
+                <button onClick={logout} style={{ marginLeft: "10px" }}>Cerrar sesión</button>
+            </div>
             {/* Contenedor principal */}
             <h1 className="titulo">Pendientes UT - El mejor CIPAS</h1>
             {/* Contenedor lista de tareas */}
@@ -174,7 +221,7 @@ function App() {
             {/* Contenedor de botones */}
             <div className={`buttons ${isMobile ? 'responsive' : 'normal'}`}>
                 <button className="añadirTarea" onClick={() => setModalVisible(true)}>Añadir Tarea</button>
-                <button className="borrarTarea" onClick={() => setTareas([])}>Borrar todas las tareas</button>
+                <button className="borrarTarea" onClick={borrarTodasLasTareas}>Borrar todas las tareas</button>
             </div>
             {/* Ventana de añadir tarea */}
             {modalVisible && (

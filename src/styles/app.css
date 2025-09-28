@@ -196,3 +196,15 @@ footer {
 .modal-content button:hover {
     background-color: #4b4b4b;
 }
+
+.logout-container.normal {
+    text-align: right;
+    padding: 10px;
+    margin-right: 20px;
+}
+
+.logout-container.responsive {
+    text-align: center;
+    padding: 10px;
+}
+
