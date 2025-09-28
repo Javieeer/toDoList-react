@@ -33,3 +33,179 @@ body {
     background-color: #f9f9f9;
   }
 }
+
+/* html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+.titulo {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 2rem;
+}
+
+.todolist {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 32px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.listaNoDone, .listaDone {
+    flex: 1;
+    min-width: 280px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.listaNoDone ul, .listaDone ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.añadirTarea, .borrarTarea {
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: none;
+    background: #1976d2;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+.borrarTarea {
+    background: #d32f2f;
+}
+.añadirTarea:hover, .borrarTarea:hover {
+    opacity: 0.85;
+}
+
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.modal-content {
+    background: #fff;
+    padding: 24px;
+    border-radius: 10px;
+    min-width: 280px;
+    max-width: 90vw;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.modal-content input, .modal-content button {
+    font-size: 1rem;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.modal-content button {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.modal-content button:last-child {
+    background: #d32f2f;
+}
+
+@media (max-width: 900px) {
+    .todolist {
+        flex-direction: column;
+        gap: 16px;
+        padding: 10px;
+    }
+    .listaNoDone, .listaDone {
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .todolist {
+        flex-direction: column;
+        gap: 12px;
+        padding: 4px;
+    }
+    .listaNoDone {
+        order: 1;
+    }
+    .listaDone {
+        order: 2;
+    }
+}
+
+@media (max-width: 400px) {
+    .titulo {
+        font-size: 1rem;
+        margin-top: 10px;
+    }
+    .todolist {
+        flex-direction: column;
+        gap: 8px;
+        padding: 2px;
+        max-width: 100vw;
+    }
+    .listaNoDone, .listaDone {
+        min-width: unset;
+        padding: 6px;
+        font-size: 0.9rem;
+        border-radius: 5px;
+    }
+    .modal-content {
+        padding: 6px;
+        min-width: 98vw;
+        font-size: 0.95rem;
+        gap: 6px;
+    }
+    .modal-content input, .modal-content button {
+        font-size: 0.95rem;
+        padding: 6px;
+        margin-bottom: 6px;
+    }
+    .buttons {
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+    .añadirTarea, .borrarTarea {
+        padding: 8px 10px;
+        font-size: 0.95rem;
+    }
+    ul {
+        padding-left: 0;
+    }
+    li {
+        word-break: break-word;
+    }
+} */

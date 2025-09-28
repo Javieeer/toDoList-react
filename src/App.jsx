@@ -21,8 +21,13 @@ function App() {
             const tareasList = tareasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setTareas(tareasList);
         };
-    
+        const checkMobile = () => {
+            setIsMobile(window.matchMedia("(max-width: 655px)").matches);
+        };
         fetchTareas();
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
     }, []);
 
     /* Definimos los estados para el modal y la nueva tarea */
@@ -31,6 +36,7 @@ function App() {
     const [nuevoResponsable, setNuevoResponsable] = useState('');
     const [nuevoLink, setNuevoLink] = useState('');
     const [nuevaFechaEntrega, setNuevaFechaEntrega] = useState('');
+    const [isMobile, setIsMobile] = useState(false);
     const inputRef = useRef(null);
 
     /* Guardamos las tareas en el localStorage cada vez que cambian */
@@ -127,11 +133,11 @@ function App() {
     return (
         <>
             {/* Contenedor principal */}
-            <h1 className="titulo">Pendientes UT - The Police</h1>
+            <h1 className="titulo">Pendientes UT - El mejor CIPAS</h1>
             {/* Contenedor lista de tareas */}
-            <div className="todolist">
+            <div className={`todolist ${isMobile ? 'responsive' : 'normal'}`}>
                 {/* Contenedor de tareas pendientes */}
-                <div className="listaNoDone">
+                <div className={`listaNoDone ${isMobile ? 'responsive' : 'normal'}`}>
                     <h2>Lista de Tareas</h2>
                     <ul>
                         {tareas
@@ -141,12 +147,13 @@ function App() {
                                     key={tarea.id} 
                                     tarea={tarea} 
                                     toggleCompletado={toggleCompletado}
+                                    eliminarTarea={eliminarTarea}
                                 />
                             ))}
                     </ul>
                 </div>
                 {/* Contenedor de tareas completadas */}
-                <div className="listaDone">
+                <div className={`listaDone ${isMobile ? 'responsive' : 'normal'}`}>
                     {tareasCompletadas.length > 0 && (
                         <>
                             <h2>Tareas Completadas</h2>
@@ -156,6 +163,7 @@ function App() {
                                         key={tarea.id} 
                                         tarea={tarea} 
                                         toggleCompletado={toggleCompletado}
+                                        eliminarTarea={eliminarTarea}
                                     />
                                 ))}
                             </ul>
@@ -164,13 +172,17 @@ function App() {
                 </div>
             </div>
             {/* Contenedor de botones */}
-            <div className="buttons">
+            <div className={`buttons ${isMobile ? 'responsive' : 'normal'}`}>
                 <button className="añadirTarea" onClick={() => setModalVisible(true)}>Añadir Tarea</button>
                 <button className="borrarTarea" onClick={() => setTareas([])}>Borrar todas las tareas</button>
             </div>
             {/* Ventana de añadir tarea */}
             {modalVisible && (
-                <div className="modal" onKeyDown={handleKeyDown} tabIndex="0">
+                <div 
+                    className="modal" 
+                    onKeyDown={handleKeyDown} 
+                    onClick={handleOutsideClick}
+                    tabIndex="0" >
                     <div className="modal-content">
                         <h3>Nueva Tarea</h3>
                         <input 
